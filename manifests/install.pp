@@ -8,9 +8,14 @@ define haproxy::install (
   }
 
   if $package_name != undef {
+    exec { 'update-repo':
+      command => "/usr/bin/apt-get update -m -y"
+    }
+
     package { $package_name:
-      ensure => $package_ensure,
-      alias  => 'haproxy',
+      ensure  => $package_ensure,
+      alias   => 'haproxy',
+      require => Exec['update-repo']
     }
   }
 
